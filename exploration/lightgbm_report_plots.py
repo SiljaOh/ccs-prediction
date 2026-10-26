@@ -9,7 +9,8 @@ from lightgbm import LGBMRegressor
 # =========================================
 # Load Data
 # =========================================
-DATA_PATH = "/Users/siljaohlsen/Library/CloudStorage/OneDrive-Persönlich/Uni/2.Semeseter/GAD/Tolga/untitled/SeqOHE_with_mods.csv"
+import sys
+DATA_PATH = sys.argv[1] if len(sys.argv) > 1 else "data/ccs_with_mods.csv"
 df = pd.read_csv(DATA_PATH)
 
 seqs = df["Sequence"].astype(str).values
