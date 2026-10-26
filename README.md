@@ -33,7 +33,22 @@ Ion mobility spectrometry separates ions by their size and shape in a drift gas.
 
 ## About this code
 
-The code in `src/` and `scripts/` is a clean re-implementation of the methods from our report, written in October 2026 so that the full pipeline is in one place and reproducible. My original experiments from the project are in [`exploration/`](exploration/). Results of re-running the pipeline will be added to `results/`.
+The code in `src/` and `scripts/` is a clean re-implementation of the methods from our report, written in October 2026 so that the full pipeline is in one place and reproducible. My original experiments from the project are in [`exploration/`](exploration/).
+
+### Re-run of the pipeline (October 2026)
+
+All four models were re-trained with this code on the cleaned dataset (243,088 peptides, same 75/10/15 split). Because this ran on a 2-core CPU, the deep models were trained for only **10 epochs** (report: 45–50) and the Random Forest used **100 trees of depth 30** (report: 1000 trees, depth 55):
+
+| Model | R² | MAE (Å²) | Pearson r | report R² |
+|---|---|---|---|---|
+| Ridge Regression | 0.963 | 14.25 | 0.981 | 0.963 |
+| Random Forest (reduced) | 0.972 | 12.18 | 0.986 | 0.971 |
+| CNN (10 epochs) | **0.977** | **11.26** | **0.989** | 0.976 |
+| LSTM (10 epochs) | 0.970 | 12.93 | 0.985 | 0.977 |
+
+![Model comparison of the re-run](results/figures/model_comparison.png)
+
+Ridge, Random Forest and CNN reproduce the report closely. The LSTM falls behind after only 10 epochs; its validation loss was still fluctuating, so it needs the full training schedule. Metrics are in `results/*.json` and all plots in [`results/figures/`](results/figures/).
 
 ## Method
 
