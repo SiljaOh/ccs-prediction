@@ -55,24 +55,24 @@ def modification_flags(mods: list[str]) -> np.ndarray:
 
 
 def tabular(df: pd.DataFrame, with_mods: bool = False) -> tuple[np.ndarray, list[str]]:
-    """Flat feature matrix for Ridge Regression and Random Forest (up to 690 features)."""
-    rows, names = [], None
-    for seq, mseq, z in zip(df["Sequence"], df["Modified sequence"], df["Charge"]):
-        mods = modifications(mseq)
-        mass = peptide_mass(seq, mods)
-        parts = [
-            np.array([mass, z, mz(mass, z), len(seq), count_hydrophobic(seq)], dtype=np.float32),
-            aa_counts(seq),
-            one_hot(seq).ravel(),
-        ]
-        if with_mods:
-            parts.append(modification_flags(mods))
-        rows.append(np.concatenate(parts))
+    """Flat feature matrix for Ridge Regression and Random Forest (up to 690 features).
+
+    The matrix is preallocated as float32 to keep memory low (~0.7 GB for 240k peptides).
+    """
     names = (["total_mass", "charge", "mz", "length", "count_hydrophobic"]
              + [f"count_{a}" for a in AMINO_ACIDS]
              + [f"ohe_{i}_{a}" for i in range(MAX_LENGTH) for a in AMINO_ACIDS]
              + (["is_oxidated", "is_acetylated", "is_modified"] if with_mods else []))
-    return np.vstack(rows), names
+    X = np.zeros((len(df), len(names)), dtype=np.float32)
+    for r, (seq, mseq, z) in enumerate(zip(df["Sequence"], df["Modified sequence"], df["Charge"])):
+        mods = modifications(mseq)
+        mass = peptide_mass(seq, mods)
+        X[r, :5] = (mass, z, mz(mass, z), len(seq), count_hydrophobic(seq))
+        X[r, 5:25] = aa_counts(seq)
+        X[r, 25:665] = one_hot(seq).ravel()
+        if with_mods:
+            X[r, 665:668] = modification_flags(mods)
+    return X, names
 
 
 def feature_group(name: str) -> str:
