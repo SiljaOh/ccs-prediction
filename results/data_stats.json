@@ -1,0 +1,16 @@
+{
+  "rows_raw": 247326,
+  "rows_after_deduplication": 247326,
+  "iqr_length_limit": 32.0,
+  "share_longer_than_limit": 0.017135278943580537,
+  "rows_final": 243088,
+  "charge_states": {
+    "1": 2105,
+    "2": 162271,
+    "3": 67787,
+    "4": 10925
+  },
+  "ccs_median": 462.88969916672306,
+  "ccs_mean": 478.1431437256982,
+  "share_modified": 0.18887398802079905
+}
