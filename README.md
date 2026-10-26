@@ -1,10 +1,13 @@
 # Machine Learning vs. Deep Learning for Peptide CCS Prediction
 
-Can classical machine learning keep up with deep learning when predicting the **collision cross section (CCS)** of peptides from their sequence? This project compares four models on an ion mobility dataset of **844,122 peptide measurements** (240,000+ unique peptides after cleaning):
+**A research project in the Computational Mass Spectrometry group of Prof. Mathias Wilhelm at the Technical University of Munich (February 2025 – January 2026).**
 
-**Ridge Regression** · **Random Forest** · **1D-CNN** · **LSTM**
+Can classical machine learning keep up with deep learning when predicting the **collision cross section (CCS)** of peptides from their sequence? We compared four models, **Ridge Regression, Random Forest, a 1D-CNN and an LSTM**, on an ion mobility dataset from the Wilhelm lab with **844,122 peptide measurements** (240,000+ unique peptides after cleaning).
 
-The project was carried out from February 2025 to January 2026 in the **Computational Mass Spectrometry group of Prof. Mathias Wilhelm (TUM)**, together with Lara Groß and Anna Niederlechner.
+![Predicted vs. experimental CCS on the test set for all four models](docs/figures/model_comparison_report.png)
+<sub>Predicted vs. experimental CCS on the held-out test set, coloured by charge state (figures from our project report).</sub>
+
+**Team:** Lara Groß, Anna Niederlechner, Silja Ohlsen · **Supervision:** Computational Mass Spectrometry, Prof. Dr. Mathias Wilhelm, TUM
 
 ## Why CCS?
 
@@ -21,7 +24,11 @@ Ion mobility spectrometry separates ions by their size and shape in a drift gas.
 
 - **Both deep learning models are best**, and they are practically tied. This suggests that CCS is driven mostly by local sequence motifs and charge rather than long-range dependencies, so the cheaper CNN is a good choice at proteome scale.
 - **The Random Forest comes close** (R² 0.971) at a fraction of the cost. Total mass (≈ 43 %) and charge (≈ 30 %) dominate its feature importances.
+
+  <img src="docs/figures/rf_feature_importance_report.png" width="520" alt="Random Forest feature importances">
 - **Even the linear Ridge baseline reaches R² 0.963**, which shows how strongly CCS scales with mass and charge. The errors that remain are mostly in charge states +3 and +4, where peptides are more flexible.
+![Error distributions](docs/figures/error_distributions_report.png)
+
 - **Modifications** (methionine oxidation, N-terminal acetylation) added almost nothing once the sequence and charge were known.
 
 ## About this code
@@ -78,4 +85,4 @@ results/           metrics (JSON) and figures produced by the scripts
 
 ## Team
 
-Lara Groß, Anna Niederlechner, Silja Ohlsen. Supervised in the Computational Mass Spectrometry group (Prof. Dr. Mathias Wilhelm), Technical University of Munich.
+Lara Groß, Anna Niederlechner and Silja Ohlsen, in the Computational Mass Spectrometry group of Prof. Dr. Mathias Wilhelm, Technical University of Munich. The dataset and the project were provided by the Wilhelm lab.
